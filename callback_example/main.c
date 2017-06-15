@@ -32,13 +32,12 @@ int main()
 	set_callback(add);
 	printf("ADD result [%d]\n", do_something(num1, num2));
 
-	set_callback(subtract);
-	printf("SUBTRACT result [%d]\n", do_something(num1, num2));
+	printf("ADD result new number [%d]\n", do_something(100, 23));
 
 	set_callback(multiply);
 	printf("MULTIPLY result [%d]\n", do_something(num1, num2));
 	
-	printf("POWER result [%d]\n", do_something(power, num1, num2));
+	printf("POWER result [%d]\n", do_something(power,num1, num2));
 
 	return 0;
 }
