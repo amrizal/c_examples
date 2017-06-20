@@ -3,6 +3,7 @@
 #include <string.h>
 #include <pthread.h>
 #include <unistd.h>
+#include <stdlib.h>
 
 static runner1_callback my_callback = NULL;
 static bool initialized = false;
@@ -10,7 +11,10 @@ static pthread_t thread_stub;
 
 void* do_something(void* param){
 
-	int interval = *((int*)param);
+	int* temp = (int*)param;
+	int interval = *temp;
+	free(temp);
+
 	printf("do_something interval [%d]\n", interval);
 	
 	if(my_callback != NULL){
@@ -50,7 +54,9 @@ bool start_runner1(int interval){
 		return false;
 	}
 
-	if(pthread_create(&thread_stub, NULL, do_something, (void*)&interval)){
+	int *param = (int*)malloc(sizeof(int));
+	*param = interval;
+	if(pthread_create(&thread_stub, NULL, do_something, (void*)param)){
 		return false;
 	} 
 
