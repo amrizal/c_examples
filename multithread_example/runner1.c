@@ -14,14 +14,12 @@ void* do_something(void* param){
 	int* temp = (int*)param;
 	int interval = *temp;
 	free(temp);
-
-	printf("do_something interval [%d]\n", interval);
 	
 	if(my_callback != NULL){
 		char buffer[100];
 		int i;
 		for(i=0; i<10; i++){
-			sprintf(buffer, "[%d] Runner 1 at %d", interval,  i+1);
+			sprintf(buffer, "Runner 1 at %d", i+1);
 			my_callback(buffer, sizeof(buffer));
 
 			sleep(interval);	
@@ -48,8 +46,6 @@ bool init_runner1(){
 }
 
 bool start_runner1(int interval){
-	
-	printf("Interval [%d]\n", interval);
 
 	if(!initialized){
 		return false;
