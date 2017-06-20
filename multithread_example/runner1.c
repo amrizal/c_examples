@@ -19,7 +19,8 @@ void* do_something(void* param){
 	
 	if(my_callback != NULL){
 		char buffer[100];
-		for(int i=0; i<10; i++){
+		int i;
+		for(i=0; i<10; i++){
 			sprintf(buffer, "[%d] Runner 1 at %d", interval,  i+1);
 			my_callback(buffer, sizeof(buffer));
 

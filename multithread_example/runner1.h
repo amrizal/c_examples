@@ -1,6 +1,7 @@
 #ifndef _RUNNER1_H
 #define _RUNNER1_H
 
+typedef enum { false, true } bool;
 typedef void (*runner1_callback)(const char* message, int length);
 
 bool init_runner1();
