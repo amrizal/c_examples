@@ -1,10 +1,20 @@
 #include "runner1.h"
+#include "runner2.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
+
+unsigned get_tick_count() {
+    struct timespec ts;
+    unsigned theTick = 0U;
+    clock_gettime( CLOCK_REALTIME, &ts );
+    theTick  = ts.tv_nsec / 1000000;
+    theTick += ts.tv_sec * 1000;
+    return theTick;
+}
 
 void do_callback1(const char* message, int length){
-	printf(message);
-	printf("\n");
+	printf("[%u] %s\n", get_tick_count(), message);
 }
 
 int main(int argc, const char* argv[]){
@@ -14,19 +24,37 @@ int main(int argc, const char* argv[]){
 		printf("Failed to INIT runner 1\n");
 	}
 
-	int interval = 1;
-	if(argc > 1){
-		interval = atoi(argv[1]);
+	set_runner2_callback(do_callback1);
+	if(!init_runner2()){
+		printf("Failed to INIT runner 2\n");
 	}
 
-	printf("Interval is %d seconds\n", interval);
+	int runner1_interval = 1;
+	if(argc > 1){
+		runner1_interval = atoi(argv[1]);
+	}
 
-	if(!start_runner1(interval)){
+	printf("Runner 1 interval is %d seconds\n", runner1_interval);
+
+	int runner2_interval = 3;
+	if(argc > 2){
+		runner2_interval = atoi(argv[2]);
+	}
+
+	printf("Runner 2 interval is %d seconds\n", runner2_interval);
+
+	if(!start_runner1(runner1_interval)){
 		printf("Failed to START runner 1\n");
 	}
 
+	if(!start_runner2(runner2_interval)){
+		printf("Failed to START runner 2\n");
+	}
+
+
 	uninit_runner1();
-	
+	uninit_runner2();
+
 	printf("--end--\n");
 	return 0;
 }

@@ -1,11 +1,11 @@
-#include "runner1.h"
+#include "runner2.h"
 #include <stdio.h>
 #include <string.h>
 #include <pthread.h>
 #include <unistd.h>
 #include <stdlib.h>
 
-static runner1_callback my_callback = NULL;
+static runner2_callback my_callback = NULL;
 static bool initialized = false;
 static pthread_t thread_stub;
 
@@ -19,7 +19,7 @@ static void* do_something(void* param){
 		char buffer[100];
 		int i;
 		for(i=0; i<10; i++){
-			sprintf(buffer, "Runner 1 at %d", i+1);
+			sprintf(buffer, "Runner 2 at %d", i+1);
 			my_callback(buffer, sizeof(buffer));
 
 			sleep(interval);	
@@ -28,15 +28,15 @@ static void* do_something(void* param){
 	return NULL;
 }
 
-void set_runner1_callback(runner1_callback fptr){
+void set_runner2_callback(runner2_callback fptr){
 	my_callback = fptr;
 }
 
-void uninit_runner1(){
+void uninit_runner2(){
 	pthread_join(thread_stub, NULL);	
 }
 
-bool init_runner1(){
+bool init_runner2(){
 	if(my_callback == NULL){
 		return false;
 	}
@@ -45,7 +45,7 @@ bool init_runner1(){
 	return true;
 }
 
-bool start_runner1(int interval){
+bool start_runner2(int interval){
 
 	if(!initialized){
 		return false;
