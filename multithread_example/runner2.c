@@ -1,12 +1,15 @@
 #include "runner2.h"
+
 #include <stdio.h>
 #include <string.h>
 #include <pthread.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <signal.h>
 
 static runner2_callback my_callback = NULL;
 static bool initialized = false;
+static bool exit_thread;
 static pthread_t thread_stub;
 
 static void* do_something(void* param){
@@ -19,7 +22,11 @@ static void* do_something(void* param){
 		char buffer[100];
 		int i;
 		for(i=0; i<10; i++){
-			sprintf(buffer, "Runner 2 at %d", i+1);
+			if(exit_thread == true){
+				break;
+			}
+
+			sprintf(buffer, "Runner 2 at %d [%d]", i+1, exit_thread);
 			my_callback(buffer, sizeof(buffer));
 
 			sleep(interval);	
@@ -33,6 +40,10 @@ void set_runner2_callback(runner2_callback fptr){
 }
 
 void uninit_runner2(){
+
+	printf("uninit_runner2\n");
+
+	exit_thread =  true;
 	pthread_join(thread_stub, NULL);	
 }
 
@@ -50,6 +61,8 @@ bool start_runner2(int interval){
 	if(!initialized){
 		return false;
 	}
+
+	exit_thread = false;
 
 	int *param = (int*)malloc(sizeof(int));
 	*param = interval;

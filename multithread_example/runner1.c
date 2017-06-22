@@ -33,6 +33,7 @@ void set_runner1_callback(runner1_callback fptr){
 }
 
 void uninit_runner1(){
+	printf("uninit_runner1\n");
 	pthread_join(thread_stub, NULL);	
 }
 

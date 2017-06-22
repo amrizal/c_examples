@@ -1,17 +1,10 @@
-#include "runner1.h"
-#include "runner2.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
+#include <unistd.h>
 
-unsigned get_tick_count() {
-    struct timespec ts;
-    unsigned theTick = 0U;
-    clock_gettime( CLOCK_REALTIME, &ts );
-    theTick  = ts.tv_nsec / 1000000;
-    theTick += ts.tv_sec * 1000;
-    return theTick;
-}
+#include "util.h"
+#include "runner1.h"
+#include "runner2.h"
 
 void do_callback1(const char* message, int length){
 	printf("[%u] %s\n", get_tick_count(), message);
